@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "download-aws-task-definition",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Download and persist a Task Definition json file",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,14 +15,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/chaffeqa/download-aws-task-definition.git"
   },
   "keywords": [
     "actions",
     "node",
-    "setup"
+    "ecs",
+    "aws",
+    "task-definition"
   ],
-  "author": "YourNameOrOrganization",
+  "author": "Sportshub Technologies LLC",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.0",
