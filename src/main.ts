@@ -90,7 +90,13 @@ async function run(): Promise<void> {
     delete taskDefinition.taskDefinitionArn
 
     // Write out a new task definition file
-    const filePath = path.join(process.env.RUNNER_TEMP || process.env.GITHUB_WORKSPACE || process.env.PWD || "", `task-definition-${gitSha}.json`)
+    const filePath = path.join(
+      process.env.RUNNER_TEMP ||
+        process.env.GITHUB_WORKSPACE ||
+        process.env.PWD ||
+        '',
+      `task-definition-${gitSha}.json`
+    )
     const newTaskDefContents = JSON.stringify(taskDefinition, null, 2)
     fs.writeFileSync(filePath, newTaskDefContents)
     core.setOutput('task-definition', filePath)
