@@ -23,6 +23,9 @@ inputs:
   app-env:
     description: 'app-env'
     required: true
+outputs:
+  task-definition:
+    description: 'The path to the rendered task definition file'
 runs:
   using: 'node12'
   main: 'dist/index.js'
