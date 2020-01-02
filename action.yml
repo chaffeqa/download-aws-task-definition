@@ -1,10 +1,28 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Quinn Chaffee'
+description: 'Download and persist a Task Definition json file'
+author: 'Sportshub Technologies LLC'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  aws-region:
+    description: 'AWS Region'
+    required: true
+  aws-profile:
+    description: 'aws-profile'
+    required: true
+  aws-cluster-name:
+    description: 'aws-cluster-name'
+    required: true
+  aws-service-name:
+    description: 'aws-service-name'
+    required: true
+  docker-image:
+    description: 'docker-image'
+    required: true
+  docker-build-number:
+    description: 'docker-build-number'
+    required: true
+  app-env:
+    description: 'app-env'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
