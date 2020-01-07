@@ -26,6 +26,8 @@ inputs:
 outputs:
   task-definition:
     description: 'The path to the rendered task definition file'
+  container-definition-names:
+    description: 'Comma separated list of the container definition names in the task definition'
 runs:
   using: 'node12'
   main: 'dist/index.js'
