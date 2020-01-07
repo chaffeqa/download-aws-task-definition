@@ -20,10 +20,10 @@ async function run(): Promise<void> {
     })
     const gitSha = process.env.GITHUB_SHA || 'unknown'
 
-    const credentials = new AWS.SharedIniFileCredentials({profile})
-    await credentials.getPromise()
-
-    const ECS = new AWS.ECS({region, credentials})
+    const ECS = new AWS.ECS({
+      region,
+      customUserAgent: 'amazon-ecs-deploy-task-definition-for-github-actions',
+    })
     const res = await ECS.describeServices({
       cluster: clusterName,
       services: [serviceName]
