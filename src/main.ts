@@ -49,24 +49,29 @@ async function run(): Promise<void> {
       throw new Error(`no taskDefinition`)
     }
     const containerDefinitions = taskDefinition.containerDefinitions || []
-    const currentDef = containerDefinitions.length && containerDefinitions[0]
-    if (!currentDef) {
-      core.warning(JSON.stringify(res1))
-      throw new Error(`no currentDef`)
-    }
     const containerDefinitionNames = containerDefinitions.map(def => def.name)
-    core.debug(
-      `Task Definition ${taskDefinition.taskDefinitionArn} is currently running ${currentDef.image} `
-    )
     core.debug(
       `Container Definitions names: ${containerDefinitionNames.join(', ')}`
     )
+    const containerDefinitionsWithNames = containerDefinitions.filter(
+      def => !!def.name
+    )
+    const firstContainerDefinition =
+      containerDefinitionsWithNames.length && containerDefinitionsWithNames[0]
+    if (!firstContainerDefinition || !firstContainerDefinition.name) {
+      core.warning(JSON.stringify(res1))
+      throw new Error(`no firstContainerDefinition (with name)`)
+    }
+    core.debug(
+      `Task Definition ${taskDefinition.taskDefinitionArn} is currently running ${firstContainerDefinition.image} `
+    )
 
     // Set the new image on the task definition
-    currentDef.image = imageTag
+    firstContainerDefinition.image = imageTag
 
     const replaceEnvNames = ['DOCKER_BUILD', 'GIT_REVISION']
-    const containerDefEnvVars = currentDef.environment || ([] as never[])
+    const containerDefEnvVars =
+      firstContainerDefinition.environment || ([] as never[])
     const environment = containerDefEnvVars.filter(
       env => !replaceEnvNames.includes(env.name || '')
     )
@@ -81,7 +86,7 @@ async function run(): Promise<void> {
       value: `${appEnv}-${dockerBuildNumber}`
     })
 
-    currentDef.environment = environment
+    firstContainerDefinition.environment = environment
 
     // There are certain attributes that AWS does not expect to receive back in.
     delete taskDefinition.compatibilities
@@ -102,8 +107,12 @@ async function run(): Promise<void> {
     fs.writeFileSync(filePath, newTaskDefContents)
     core.setOutput('task-definition', filePath)
     core.setOutput(
-      'container-definition-names',
+      'container-definition-name',
       containerDefinitionNames.join(',')
+    )
+    core.setOutput(
+      'first-container-definition-name',
+      firstContainerDefinition.name
     )
   } catch (error) {
     core.setFailed(error.message)
