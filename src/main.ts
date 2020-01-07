@@ -48,16 +48,18 @@ async function run(): Promise<void> {
       core.warning(JSON.stringify(res1))
       throw new Error(`no taskDefinition`)
     }
-    const currentDef =
-      taskDefinition.containerDefinitions &&
-      taskDefinition.containerDefinitions.length &&
-      taskDefinition.containerDefinitions[0]
+    const containerDefinitions = taskDefinition.containerDefinitions || []
+    const currentDef = containerDefinitions.length && containerDefinitions[0]
     if (!currentDef) {
       core.warning(JSON.stringify(res1))
       throw new Error(`no currentDef`)
     }
+    const containerDefinitionNames = containerDefinitions.map(def => def.name)
     core.debug(
-      `Task Definition ${taskDefinition.taskDefinitionArn} is currently running ${currentDef.image}`
+      `Task Definition ${taskDefinition.taskDefinitionArn} is currently running ${currentDef.image} `
+    )
+    core.debug(
+      `Container Definitions names: ${containerDefinitionNames.join(', ')}`
     )
 
     // Set the new image on the task definition
@@ -99,6 +101,10 @@ async function run(): Promise<void> {
     const newTaskDefContents = JSON.stringify(taskDefinition, null, 2)
     fs.writeFileSync(filePath, newTaskDefContents)
     core.setOutput('task-definition', filePath)
+    core.setOutput(
+      'container-definition-names',
+      containerDefinitionNames.join(',')
+    )
   } catch (error) {
     core.setFailed(error.message)
   }
