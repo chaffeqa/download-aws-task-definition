@@ -6,7 +6,6 @@ import fs from 'fs'
 async function run(): Promise<void> {
   try {
     const region: string = core.getInput('aws-region', {required: true})
-    const profile: string = core.getInput('aws-profile', {required: true})
     const clusterName: string = core.getInput('aws-cluster-name', {
       required: true
     })
@@ -22,7 +21,7 @@ async function run(): Promise<void> {
 
     const ECS = new AWS.ECS({
       region,
-      customUserAgent: 'amazon-ecs-deploy-task-definition-for-github-actions',
+      customUserAgent: 'amazon-ecs-deploy-task-definition-for-github-actions'
     })
     const res = await ECS.describeServices({
       cluster: clusterName,
