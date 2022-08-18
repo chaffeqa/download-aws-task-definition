@@ -27,7 +27,7 @@
   "author": "Sportshub Technologies LLC",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.0",
+    "@actions/core": "^1.9.1",
     "aws-sdk": "^2.596.0"
   },
   "devDependencies": {
